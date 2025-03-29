@@ -1,0 +1,46 @@
+command /setup ranks:
+    trigger:
+        send "&aSetting up LiteBans permissions for all ranks..." to player
+
+        # Helper Permissions
+        execute console command "/lp group helper permission set litebans.warn true"
+        execute console command "/lp group helper permission set litebans.kick true"
+        execute console command "/lp group helper permission set litebans.mutelist true"
+        execute console command "/lp group helper permission set litebans.history true"
+
+        # Mod Permissions
+        execute console command "/lp group mod permission set litebans.ban true"
+        execute console command "/lp group mod permission set litebans.mute true"
+        execute console command "/lp group mod permission set litebans.tempban true"
+        execute console command "/lp group mod permission set litebans.tempmute true"
+        execute console command "/lp group mod permission set litebans.dupeip true"
+        execute console command "/lp group mod permission set litebans.history true"
+
+        # Sr.Mod Permissions
+        execute console command "/lp group sr.mod permission set litebans.ban true"
+        execute console command "/lp group sr.mod permission set litebans.mute true"
+        execute console command "/lp group sr.mod permission set litebans.tempban true"
+        execute console command "/lp group sr.mod permission set litebans.tempmute true"
+        execute console command "/lp group sr.mod permission set litebans.unban.own true"
+        execute console command "/lp group sr.mod permission set litebans.unmute.own true"
+        execute console command "/lp group sr.mod permission set litebans.dupeip true"
+        execute console command "/lp group sr.mod permission set litebans.notify true"
+        execute console command "/lp group sr.mod permission set litebans.history true"
+
+        # Admin Permissions
+        execute console command "/lp group admin permission set litebans.ban true"
+        execute console command "/lp group admin permission set litebans.mute true"
+        execute console command "/lp group admin permission set litebans.tempban true"
+        execute console command "/lp group admin permission set litebans.tempmute true"
+        execute console command "/lp group admin permission set litebans.unban true"
+        execute console command "/lp group admin permission set litebans.unmute true"
+        execute console command "/lp group admin permission set litebans.dupeip true"
+        execute console command "/lp group admin permission set litebans.ipban true"
+        execute console command "/lp group admin permission set litebans.ipmute true"
+        execute console command "/lp group admin permission set litebans.notify true"
+        execute console command "/lp group admin permission set litebans.history true"
+
+        # Sr.Admin Permissions
+        execute console command "/lp group sr.admin permission set litebans.* true"
+
+        send "&aLiteBans permissions have been set up successfully for all ranks!" to player

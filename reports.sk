@@ -1,0 +1,91 @@
+# Made by Tazmyan (Daddy tazy is cool)
+
+command /report <offlineplayer> <text>:
+  usage: &f/report &e<player> &c<reason>
+  cooldown: 1 second
+
+  cooldown message: &cThis command is still in cooldown! Please wait!
+
+  trigger:
+
+    if length of "%arg-2%" is more than 50:
+
+      message "&cMax length for reason is 50 character(s) / Letters!"
+
+    else:
+
+      add book named "&C%arg-1%" with lore "  &a❙ &A%player% &fhas reported &C%arg-1%" and "&a  ❙ &fReason: &c%arg-2%" and "  &C❙ &fRight Click to delete!" to {reportlist::*}
+
+      message "&aYou have succesfully reported &C%arg-1%&a!"
+
+
+ 
+
+       
+
+   
+
+ 
+
+function reportlist(p: player):
+
+  open chest inventory with 5 rows named "&c&lRᴇᴘᴏʀᴛs Lɪsᴛ" to {_P}
+
+  set slot 0,1,2,3,4,5,6,7,8,36,37,38,39,40,41,42,43,44,45 of {_p}'s current inventory to gray stained glass pane named "&7"
+
+  set {var} to 8
+
+  loop {reportlist::*}:
+
+    add 1 to {var}
+
+    set slot {var} of {_p}'s current inventory to loop-value
+
+       
+
+       
+
+command /reportlist:
+  aliases: /reports
+  permission: reports.list
+
+  trigger:
+
+    reportlist(player)
+
+
+ 
+
+command /resetreport:
+
+  permission: reports.reset
+
+  trigger:
+
+    delete {reportlist::*}
+
+    message "&cYou have cleared Reports!"
+
+ 
+
+on inventory click:
+
+  if name of event-inventory is "&c&lRᴇᴘᴏʀᴛs Lɪsᴛ":
+
+    cancel event
+
+
+ 
+
+on inventory click:
+  if name of event-inventory is "&c&lRᴇᴘᴏʀᴛs Lɪsᴛ":
+    if event-item is book:
+      if "%click type%" contains "RIGHT":
+        if player has permission "reports.delete":
+          message "&aSuccessfully deleted the report of %name of event-slot%!"
+          remove event-slot from {reportlist::*}
+          close player's inventory
+          reportlist(player)
+        else:
+          message "&cYou do not have permission to delete reports."
+          cancel event

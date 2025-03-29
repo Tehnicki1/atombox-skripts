@@ -1,0 +1,46 @@
+# Variables to store positions and regions
+options:
+  time_limit: 5 # time limit in minutes (change this as needed)
+
+# Command to set position 1
+command /mapclear position1:
+    permission: mapclear.setposition
+    trigger:
+        set {position1.%player%} to player's location
+        send "&aPosition 1 set successfully!"
+
+# Command to set position 2
+command /mapclear position2:
+    permission: mapclear.setposition
+    trigger:
+        set {position2.%player%} to player's location
+        send "&aPosition 2 set successfully!"
+
+# Command to create the region and clear blocks
+command /mapclear create <text>:
+    permission: mapclear.create
+    trigger:
+        # Check if positions are set
+        if {position1.%player%} is not set or {position2.%player%} is not set:
+            send "&cYou need to set both Position 1 and Position 2 first!" to player
+            stop
+
+        # Define the region using position1 and position2
+        set {_pos1} to {position1.%player%}
+        set {_pos2} to {position2.%player%}
+
+        # Create region name and store the region
+        set {region.%arg-1%} to {_pos1}, {_pos2}
+        send "&aRegion %arg-1% created successfully!" to player
+
+        # Clear blocks placed in the region within the last X minutes
+        set {_timeLimit} to current time - ({options::time_limit} * 60 * 1000) # Time limit in milliseconds
+        loop all blocks in {_pos1} to {_pos2}: # Iterate through the region
+            if loop-block's world is {_pos1}'s world:
+                set {_blockTime} to {blockPlacedTime.%player%.%location of loop-block%}
+                if {_blockTime} is set and {_blockTime} >= {_timeLimit}: 
+                    # Clear the block if it was placed within the time limit
+                    loop-block's location break
+        send "&aMap cleared in region %arg-1% within the last %options::time_limit% minutes!" to player
+
+

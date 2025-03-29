@@ -1,0 +1,27 @@
+# void
+
+on region enter:
+    if "%region%" contains "voiddeath":
+        teleport player to {Void}
+        make console execute "kill %player%"
+
+
+command setvoid:
+    permission: op
+    trigger:
+        set {void} to location 0.5 blocks above targeted block
+        send actionbar "&cSet location to void!" to player
+
+# no rockets
+
+on right click:
+    if player's held item is firework rocket:
+        if region at player is "void":
+            cancel event
+            send "&c&lYou can't use fireworks in the void!" to player
+
+on right click:
+    if player's offhand item is firework rocket:
+        if region at player is "void":
+            cancel event
+            send "&c&lYou can't use fireworks in the void!" to player

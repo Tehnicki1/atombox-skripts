@@ -1,0 +1,6 @@
+on damage:
+    if victim is a player:
+        if victim's chestplate is not air:
+            if victim's chestplate is not elytra:
+                set damage to damage * 1.5 # Increase damage taken by players wearing a chestplate (excluding elytra)
+

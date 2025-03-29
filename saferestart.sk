@@ -1,0 +1,22 @@
+command /srestart:
+	trigger:
+		if player is op:
+			execute player command "/announce Restart in 30 seconds"
+			wait 10 second
+			execute player command "/announce Restart in 20 seconds"
+			wait 5 second
+			execute player command "/announce Restart in 15 seconds"
+			wait 5 second
+			execute player command "/announce Restart in 10 seconds"
+			wait 5 second
+			execute player command "/announce Restart in 5 seconds"
+			wait 1 second
+			execute player command "/announce Restart in 4 seconds"
+			wait 1 second
+			execute player command "/announce Restart in 3 seconds"
+			wait 1 second
+			execute player command "/announce Restart in 2 seconds"
+			wait 1 second
+			execute player command "/announce Restart in 1 seconds"
+			wait 1 second
+			execute player command "/restart"

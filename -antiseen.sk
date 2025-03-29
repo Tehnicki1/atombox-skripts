@@ -1,0 +1,5 @@
+command /seen:
+    trigger:
+        cancel event
+        send "&cYou are not allowed to use the /seen command!" to player
+        ban player due to "&cUsing the /seen command"

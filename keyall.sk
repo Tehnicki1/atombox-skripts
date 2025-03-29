@@ -1,0 +1,29 @@
+# Made by Tazmyan
+
+command /keyall <text>:
+    permission: keyall.command
+    trigger:
+        if arg-1 is "small":
+            execute console command "crate key giveall bulbasaur 2"
+            execute console command "crate key giveall vote 1"
+            execute console command "crate key giveall gearr 1"
+            execute console command "crate key giveall groudon 2"
+            send "&aSuccessfully gave keys to all players!" to player
+        else if arg-1 is "medium":
+            execute console command "crate key giveall bulbasaur 3"
+            execute console command "crate key giveall vote 2"
+            execute console command "crate key giveall gearr 2"
+            execute console command "crate key giveall charizard 3"
+            execute console command "crate key giveall groudon 2"
+            execute console command "crate key giveall mewtwo 1"
+            send "&aSuccessfully gave keys to all players!" to player
+        else if arg-1 is "large":
+            execute console command "crate key giveall bulbasaur 4"
+            execute console command "crate key giveall vote 3"
+            execute console command "crate key giveall gearr 4"
+            execute console command "crate key giveall charizard 4"
+            execute console command "crate key giveall groudon 3"
+            execute console command "crate key giveall mewtwo 2"
+            send "&aSuccessfully gave keys to all players!" to player
+        else:
+            send "&cInvalid argument! Use /keyall <small/medium/large>" to player

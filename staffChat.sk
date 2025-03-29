@@ -1,0 +1,52 @@
+options:
+    staffChatPrefix: &b[Staff]  # Prefix for staff chat messages (color codes directly)
+    noPermissionMessage: &cYou do not have permission to use this command!  # Message for no permission
+    toggleOnMessage: &aStaff chat enabled. Your messages will now go to staff chat.
+    toggleOffMessage: &cStaff chat disabled. Your messages will now go to public chat.
+
+variables:
+    {staffChatToggle::%player%} = false  # Tracks toggle state for staff chat
+
+command /staffchat [<text>]:
+    permission: staffchat.use
+    permission message: "{@noPermissionMessage}"
+    trigger:
+        if arg-1 is not set:
+            if {staffChatToggle::%player%} is true:
+                delete {staffChatToggle::%player%}
+                send "{@toggleOffMessage}"
+            else:
+                set {staffChatToggle::%player%} to true
+                send "{@toggleOnMessage}"
+            stop
+        else:
+            loop all players:
+                if loop-player has permission "staffchat.view":
+                    send "{@staffChatPrefix} &f%player%: &e%arg-1%" to loop-player
+            stop
+
+command /sc [<text>]:
+    permission: staffchat.use
+    permission message: "{@noPermissionMessage}"
+    trigger:
+        if arg-1 is not set:
+            if {staffChatToggle::%player%} is true:
+                delete {staffChatToggle::%player%}
+                send "{@toggleOffMessage}"
+            else:
+                set {staffChatToggle::%player%} to true
+                send "{@toggleOnMessage}"
+            stop
+        else:
+            loop all players:
+                if loop-player has permission "staffchat.view":
+                    send "{@staffChatPrefix} &f%player%: &e%arg-1%" to loop-player
+            stop
+
+on chat:
+    if {staffChatToggle::%player%} is true:
+        cancel event
+        loop all players:
+            if loop-player has permission "staffchat.view":
+                send "{@staffChatPrefix} &f%player%: &e%message%" to loop-player
+        stop

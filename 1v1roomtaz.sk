@@ -1,0 +1,73 @@
+# Made by Tazmyan
+
+on load:
+    clear {1v1room1::*}
+    clear {1v1room2::*}
+    clear {1v1room3::*}
+
+on region enter:
+    if region is "1v1room1":
+        add player to {1v1room1::*}
+        if size of {1v1room1::*} is 2:
+            execute console command "fill 505 78 349 505 80 353 glass"
+    
+    if region is "1v1room2":
+        add player to {1v1room2::*}
+        if size of {1v1room2::*} is 2:
+            execute console command "fill 473 80 353 473 78 349 glass"
+    
+    if region is "1v1room3":
+        add player to {1v1room3::*}
+        if size of {1v1room3::*} is 2:
+            execute console command "fill 487 78 335 491 80 335 glass"
+
+on region exit:
+    if region is "1v1room1":
+        remove player from {1v1room1::*}
+        if size of {1v1room1::*} is less than 2:
+            execute console command "fill 505 78 349 505 80 353 air"
+    
+    if region is "1v1room2":
+        remove player from {1v1room2::*}
+        if size of {1v1room2::*} is less than 2:
+            execute console command "fill 473 80 353 473 78 349 air"
+    
+    if region is "1v1room3":
+        remove player from {1v1room3::*}
+        if size of {1v1room3::*} is less than 2:
+            execute console command "fill 487 78 335 491 80 335 air"
+
+on death:
+    if victim is in region "1v1room1":
+        remove victim from {1v1room1::*}
+        if size of {1v1room1::*} is less than 2:
+            wait 5 seconds
+            execute console command "fill 505 78 349 505 80 353 air"
+    
+    if victim is in region "1v1room2":
+        remove victim from {1v1room2::*}
+        if size of {1v1room2::*} is less than 2:
+            wait 5 seconds
+            execute console command "fill 473 80 353 473 78 349 air"
+    
+    if victim is in region "1v1room3":
+        remove victim from {1v1room3::*}
+        if size of {1v1room3::*} is less than 2:
+            wait 5 seconds
+            execute console command "fill 487 78 335 491 80 335 air"
+
+on quit:
+    if player is in region "1v1room1":
+        remove player from {1v1room1::*}
+        if size of {1v1room1::*} is less than 2:
+            execute console command "fill 505 78 349 505 80 353 air"
+    
+    if player is in region "1v1room2":
+        remove player from {1v1room2::*}
+        if size of {1v1room2::*} is less than 2:
+            execute console command "fill 473 80 353 473 78 349 air"
+    
+    if player is in region "1v1room3":
+        remove player from {1v1room3::*}
+        if size of {1v1room3::*} is less than 2:
+            execute console command "fill 487 78 335 491 80 335 air"

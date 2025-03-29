@@ -1,0 +1,4 @@
+on command:
+    if command is "kit":
+        if {duel.%player%} is set:
+            cancel event

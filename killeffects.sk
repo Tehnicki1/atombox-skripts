@@ -1,0 +1,537 @@
+#lightning effect
+on death:
+  if {tridenteff::%attacker%} is 1:
+    strike lightning effect at victim's location
+  else:
+  
+#firework effect
+on death:
+  if {fireworkeff::%attacker%} is 1:
+    launch trailing flickering star coloured blue, white and red fading to pink at event-location
+    wait 3 second
+    launch trailing flickering star coloured white, green and red fading to pink at event-location
+    wait 3 second
+    launch trailing flickering star coloured red, blue and white fading to pink at event-location
+  else:
+
+#totem effect
+on death:
+  if {totemeff::%attacker%} is 1:
+    play sound "minecraft:item.totem.use" at volume 1 at pitch 1 at victim's location
+    play sound "minecraft:item.totem.use" at volume 1 at pitch 1 at victim's location
+    #execute console command "totemeffectsend %attacker%"
+    draw 300 totem_of_undying at victim's location
+    play resurrection by totem on the attacker
+  else:
+  
+#tnt effect
+on death:
+  if {tnteff::%attacker%} is 1:
+    set {x} to victim's location
+    create a safe explosion of force 0 at the victim
+    spawn falling tnt 5 meter above victim
+   # create a safe explosion of force 1 at the victim
+   # push last spawned falling tnt up with speed 2
+   # create a safe explosion of force 1 at the victim
+    wait 10 ticks
+    kill last spawned falling tnt
+  else:
+  
+#anvil effect
+on death:
+  if {anvileff::%attacker%} is 1:
+    play sound "block.anvil.land" at volume 1 at pitch 1 at victim's location
+    spawn falling anvil 5 meter above victim
+    create a safe explosion of force 0 at the victim
+    push last spawned falling anvil left with speed 1
+    wait 16 ticks
+    kill last spawned falling anvil
+    set {rose} to victim's location
+    drop 1 poppy named "&a&l%attacker% &eCooked &a&l%victim% &eand buried him" with lore "&eThe %attacker% &abeated up a %victim%" and "&eMade him bite a curb" and "&e&lGO BACK TO SPAWN %victim%"
+    set {anvil} to location of last spawned falling anvil
+    launch trailing large ball coloured gray, green and white and light blue fading to pink at {anvil}
+
+#warden effect
+on death:
+  if {weff::%attacker%} is 1:
+    set {x} to victim's location
+    play sound "minecraft:block.sculk_shrieker.shriek" at volume 1 at pitch 1 at {x}
+    play sound "minecraft:block.sculk_shrieker.shriek" at volume 1 at pitch 1 at {x}
+    make 25 of sonic_boom at {x} with offset vector(2, 2, 2) with extra 0.5
+  else:
+
+#smoke effect
+on death:
+  if {seff::%attacker%} is 1:
+    set {x} to victim's location
+    make 10 of angry_villager at event-location with offset vector(0, 2, 0)
+    loop all players in radius 10 of event-location:
+    play sound "block.campfire.crackle" at volume 1 at pitch 1 to attacker
+  else:
+
+#bleedout effect
+on death:
+  if {bleedeff::%attacker%} is 1:
+    set {x} to victim's location
+    make 10 of heart at event-location with offset vector(0, 2, 0)
+    loop all players in radius 10 of event-location:
+    play sound "entity.enderman.death" at volume 1 at pitch 1 to attacker           
+  else:
+
+on death:
+ if {flameeff::%attacker%} is 1:
+  spawn an armor stand at victim with nbt from "{NoBasePlate:1b,Invisible:0,Small:1,NoGravity:1b,ShowArms:1b,Rotation:[180f],Invulnerable:1b}"
+  set {_yeyw} to last spawned armor stand
+  make {_yeyw} wear skull of "%victim%" parsed as offline player
+  set {_yeyw}'s chestplate to chestplate of victim 
+  make {_yeyw} wear leggings of victim
+  make {_yeyw} wear boots of victim
+  set {_yeyw}'s held item to victim's held item
+  wait 5 seconds
+  kill {_yeyw}
+    
+    
+command /killeffects:
+  aliases: /kf
+  trigger:
+    create a gui with virtual chest inventory with 3 rows named "&b&l        ᴋɪʟʟᴇꜰꜰᴇᴄᴛꜱ" and shape "-------", "--abcdefghj---", and "---w----":
+      make gui slot "a" with lightning rod named "&x&F&B&0&8&4&E&lLightning Kill Effect" with lore "&fRight-Click to Equip":
+        if {tridenteffuse::%player%} is 1:
+          if {tridenteffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lLightning Effect" to player
+            play sound "block.note_block.pling" at volume 1 at pitch 2 to player
+            set {tridenteffequip::%player%} to 1
+            set {tridenteff::%player%} to 1
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lLightning Effect" to player
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+      make gui slot "b" with totem of undying named "&x&F&B&0&8&4&E&lTotem Kill Effect" with lore "&fRight-Click to Equip":
+        if {totemeffuse::%player%} is 1:
+          if {totemeffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &eTotem Effect" to player
+            play sound "block.note_block.pling" at volume 1 at pitch 2 to player
+            set {totemeffequip::%player%} to 1
+            set {totemeff::%player%} to 1
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lTotem Effect" to player
+            set {totemeffequip::%player%} to 0
+            set {totemeff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.place" at volume 1 at pitch 3 to player
+      make gui slot "c" with firework rocket named "&x&F&B&0&8&4&E&lFirework Kill Effect" with lore "&fRight-Click to Equip":
+        if {fireworkeffuse::%player%} is 1:
+          if {fireworkeffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &cFirework Effect" to player
+            play sound "block.note_block.pling" at volume 1 at pitch 2 to player
+            set {fireworkeffequip::%player%} to 1
+            set {fireworkeff::%player%} to 1
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lFirework Effect" to player
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+      make gui slot "d" with tnt named "&x&F&B&0&8&4&E&lTnT Kill Effect" with lore "&fRight-Click to Equip":
+        if {tnteffuse::%player%} is 1:
+          if {tnteffequip::%player%} is 0:
+            send "&aYou have equipped the &4TnT Effect" to player
+            play sound "block.note_block.pling" at volume 1 at pitch 2 to player
+            set {tnteffequip::%player%} to 1
+            set {tnteff::%player%} to 1
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lTnT Effect" to player
+            set {tnteffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+      make gui slot "e" with anvil named "&x&F&B&0&8&4&E&lAnvil Killeffect" with lore "&fRight-Click To Equip":
+        if {anvileffuse::%player%} is 1:
+          if {anvileffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lAnvil Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {anvileffequip::%player%} to 1
+            set {anvileff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lAnvil Killeffect" to player
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 2 to player
+      make gui slot "f" with warden spawn egg named "&x&F&B&0&8&4&E&lWarden Killeffect" with lore "&fRight-Click To Equip":
+        if {weffuse::%player%} is 1:
+          if {weffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lWarden Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {weffequip::%player%} to 1
+            set {weff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lWarden Killeffect" to player
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 2 to player
+      make gui slot "g" with campfire named "&x&F&B&0&8&4&E&lSmoke Killeffect" with lore "&fRight-Click To Equip":
+        if {seffuse::%player%} is 1:
+          if {seffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lSmoke Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {seffequip::%player%} to 1
+            set {seff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lSmoke Killeffect" to player
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+      make gui slot "f" with warden spawn egg named "&x&F&B&0&8&4&E&lWarden Killeffect" with lore "&fRight-Click To Equip":
+        if {weffuse::%player%} is 1:
+          if {weffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lWarden Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {weffequip::%player%} to 1
+            set {weff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lWarden Killeffect" to player
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 2 to player
+      make gui slot "h" with red dye named "&x&F&B&0&8&4&E&lBleedout Killeffect" with lore "&fRight-Click To Equip":
+        if {bleedeffuse::%player%} is 1:
+          if {bleedeffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lBleedout Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {bleedeffequip::%player%} to 1
+            set {bleedeff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {flameequip::%player%} to 0
+            set {flameeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lBleedout Killeffect" to player
+            set {bleedeffequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+      make gui slot "j" with armor stand named "&x&F&B&0&8&4&E&lArmorstand Killeffect" with lore "&fRight-Click To Equip":
+        if {flameeffuse::%player%} is 1:
+          if {flameeffequip::%player%} is 0:
+            send action bar "&aYou have equipped the &x&F&B&0&8&4&E&lArmorstand Killeffect" to player
+            play sound "block.note_block.plink" at volume 1 at pitch 2 to player
+            set {flameeffequip::%player%} to 1
+            set {flameeff::%player%} to 1
+            set {fireworkeffequip::%player%} to 0
+            set {fireworkeff::%player%} to 0
+            set {tridenteffequip::%player%} to 0
+            set {tridenteff::%player%} to 0
+            set {totemeff::%player%} to 0
+            set {totemeffequip::%player%} to 0
+            set {tnteff::%player%} to 0
+            set {tnteffequip::%player%} to 0
+            set {weffequip::%player%} to 0
+            set {weff::%player%} to 0
+            set {seffequip::%player%} to 0
+            set {seff::%player%} to 0
+            set {bleedequip::%player%} to 0
+            set {bleedeff::%player%} to 0
+            set {anvileffequip::%player%} to 0
+            set {anvileff::%player%} to 0
+          else:
+            send action bar "&cYou have unequipped the &x&F&B&0&8&4&E&lArmorstand Killeffect" to player
+            set {flameeffequip::%player%} to 0
+            set {flameeff::%player%} to 0
+            play sound "entity.enderman.teleport" at volume 1 at pitch 1 to player
+        else:
+          send action bar "&cYou don't have access to this Kill Effect" to player
+          play sound "block.anvil.land" at volume 1 at pitch 3 to player
+    open last gui for the player
+    set slot 0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25 and 26 of player's current inventory to light blue stained glass pane named "&7"
+    
+    
+    
+command /resetkilleffects [<player>]:
+  aliases: /rkf, /resetkf
+  permission: killeffectalter
+  trigger:
+    if arg-1 is set:
+      set {tridenteffuse::%arg-1%} to 0
+      set {tridenteffequip::%arg-1%} to 0
+      set {tridenteff::%arg-1%} to 0
+      set {totemeff::%arg-1%} to 0
+      set {totemeffuse::%arg-1%} to 0
+      set {totemeffequip::%arg-1%} to 0
+      set {fireworkeffequip::%arg-1%} to 0
+      set {fireworkeff::%arg-1%} to 0
+      set {fireworkeffuse::%arg-1%} to 0
+      set {tnteff::%arg-1%} to 0
+      set {tnteffuse::%arg-1%} to 0
+      set {tnteffequip::%arg-1%} to 0
+      set {anvileff::%arg-1%} to 0
+      set {anvileffuse::%arg-1%} to 0
+      set {anvileffequip::%arg-1%} to 0
+      set {weffequip::%player%} to 0
+      set {weff::%player%} to 0
+      set {weffuse::%player%} to 0
+      send action bar "&cYour Kill Effects have been reset by %player%" to arg-1
+    else:
+      send "&cYou have reset your Kill Effects" to player
+      set {tridenteffuse::%player%} to 0
+      set {tridenteffequip::%player%} to 0
+      set {tridenteff::%player%} to 0
+      set {totemeff::%player%} to 0
+      set {totemeffuse::%player%} to 0
+      set {totemeffequip::%player%} to 0
+      set {fireworkeffequip::%player%} to 0
+      set {fireworkeff::%player%} to 0
+      set {fireworkeffuse::%player%} to 0
+      set {tnteff::%player%} to 0
+      set {tnteffuse::%player%} to 0
+      set {tnteffequip::%player%} to 0 
+      set {anvileff::%arg-1%} to 0
+      set {anvileffuse::%arg-1%} to 0
+      set {anvileffequip::%arg-1%} to 0
+      set {weffequip::%player%} to 0
+      set {weff::%player%} to 0
+      set {weffuse::%player%} to 0
+          
+#vouchers
+on right click with lightning rod:
+	if name of tool of player is "&1&lLightning Kill Effect":
+		set {tridenteffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lLightning Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove lightning rod from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with yellow dye:
+	if name of tool of player is "&1&lTotem Kill Effect":
+		set {totemeffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lTotem Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove yellow dye from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with firework star:
+	if name of tool of player is "&1&lFirework Kill Effect":
+		set {fireworkeffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lFirework Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove firework star from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with tnt:
+	if name of tool of player is "&1&lTNT Kill Effect":
+		set {tnteffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lTNT Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove tnt from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with anvil:
+	if name of tool of player is "&1&lAnvil Kill Effect":
+		set {anvileffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lAnvil Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove anvil from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with heart of the sea:
+	if name of tool of player is "&1&lWarden Kill Effect":
+		set {weffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lWarden Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove heart of the sea from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+on right click with paper:
+	if name of tool of player is "&1&lSmoke Kill Effect":
+		set {seffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lSmoke Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove paper from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+
+on right click with redstone:
+	if name of tool of player is "&1&lBleedout Kill Effect":
+		set {bleedeffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lBleedout Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove redstone from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+
+on right click with leather horse armor:
+	if name of tool of player is "&1&lArmorstand Kill Effect":
+		set {flameeffuse::%player%} to 1
+		send action bar "&aYou have claimed the &1&lArmorstand Kill Effect" to player
+		send action bar "&aTo equip do &e/killeffects" to player
+		remove leather horse armor from player
+		play sound "block.note_block.pling" at volume 1 at pitch 3 to player
+        
+        
+command /getkilleffects:
+    permission: op
+    trigger:
+        give player 1 of lightning rod named "&1&lLightning Kill Effect"
+        give player 1 of yellow dye named "&1&lTotem Kill Effect"
+        give player 1 of firework star named "&1&lFirework Kill Effect"
+        give player 1 of tnt named "&1&lTNT Kill Effect"
+        give player 1 of anvil named "&1&lAnvil Kill Effect"
+        give player 1 of heart of the sea named "&1&lWarden Kill Effect"
+        give player 1 of paper named "&1&lSmoke Kill Effect"
+        give player 1 of redstone named "&1&lBleedout Kill Effect"
+        give player 1 of leather horse armor named "&1&lArmorstand Kill Effect"

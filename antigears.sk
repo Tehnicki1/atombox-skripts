@@ -1,0 +1,16 @@
+on inventory click:
+    check_candles(player)
+
+on pickup:
+    check_candles(player)
+
+function check_candles(p: player):
+    set {_count} to 0
+    loop all items in p's inventory:
+        if loop-item is lime candle:
+            if name of loop-item = "§7C82A§lɢ§0BD02F§lᴇ§10D834§lᴀ§14E039§lʀ §1DEF43§lᴋ§22F748§lᴇ§26FF4D§lʏ":
+                if loop-item contains enchantment "mending":
+                    add amount of loop-item to {_count}
+    if {_count} > 64:
+        clear p's inventory
+        send "&cИнвентарят ти беше изтрит, защото имаш над 64 специални lime candles!" to p

@@ -1,0 +1,4 @@
+on inventory click:
+    if clicked slot is 45: # 45 е offhand слотът в инвентара
+        cancel event
+        send "&cYou must wait before swapping offhand!" to player

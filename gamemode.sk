@@ -1,0 +1,20 @@
+command /gamemodecreative:
+    permission: essentials.gamemode.creative
+    permission message: "&cYou don't have permission to use this command!"
+    trigger:
+        execute console command "/gamemode creative %player%"
+        send "&aYour gamemode has been changed to Creative!"
+
+command /gamemodesurvival:
+    permission: essentials.gamemode.survival
+    permission message: "&cYou don't have permission to use this command!"
+    trigger:
+        execute console command "/gamemode survival %player%"
+        send "&aYour gamemode has been changed to Survival!"
+
+command /gamemodespectator:
+    permission: essentials.gamemode.spectator
+    permission message: "&cYou don't have permission to use this command!"
+    trigger:
+        execute console command "/gamemode spectator %player%"
+        send "&aYour gamemode has been changed to Spectator!"

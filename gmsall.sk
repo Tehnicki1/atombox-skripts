@@ -1,0 +1,8 @@
+command /gmsall:
+    description: Set everyone on the server to Survival mode (GM 0)
+    permission: skript.gmsall
+    permission message: You do not have permission to use this command.
+    trigger:
+        loop all players:
+            set the game mode of loop-player to survival
+        send "&aEveryone's game mode has been changed to Survival!" to player

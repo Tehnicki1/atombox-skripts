@@ -1,0 +1,42 @@
+define new bot named "checker":
+
+    token: "MTMyMDUxMzczMTYzNzI4MDgzMg.GAC3Ae.fvu5v5R51oC4ZZsecq7gRvpqtud2baBEZU-VAQ"
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none  
+    on ready:
+        set the status of bot "checker" to online
+        set the presence of bot "checker" to watching "executions!"
+        
+on command "/tempban":
+    if player is a player:
+        post "**%player%** executed command /tempban %arg-1% %arg-2% %arg-3%" to text channel with id "1329542626067878029"
+
+on command "/kick":
+    if player is a player:
+        post "**%player%** executed command /kick %arg-1% %arg-2% %arg-3%" to text channel with id "1320530185266921553"
+
+on command "/unban":
+    if player is a player:
+        post "**%player%** executed command /unban %arg-1% %arg-2% %arg-3%" to text channel with id "1329542626067878029"
+
+on command "/tempmute":
+    if player is a player:
+        post "**%player%** executed command /tempmute %arg-1% %arg-2% %arg-3%" to text channel with id "1329542658963800126"
+
+on command "/unmute":
+    if player is a player:
+        post "**%player%** executed command /unmute %arg-1% %arg-2% %arg-3%" to text channel with id "1329542658963800126"
+
+on command "/warn":
+    if player is a player:
+        post "**%player%** executed command /warn %arg-1% %arg-2% %arg-3%" to text channel with id "1329542692991930378"
+
+on command "/unwarn":
+    if player is a player:
+        post "**%player%** executed command /warn %arg-1% %arg-2% %arg-3% " to text channel with id "1329542692991930378"
+
+on command "/irp restore":
+    if player is a player:
+        post "**%player%** executed command /irp restore %arg-1% %arg-2% %arg-3%" to text channel with id "1329542723794898984"

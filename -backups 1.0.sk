@@ -1,0 +1,214 @@
+command /backups [<text>]:
+	permission: backup.use
+	trigger:
+		set {1player.%player%} to arg-1
+		if {backups.%{1player.%player%}%::*} is set:
+			open chest inventory with 6 rows named "&fDeaths &c%arg-1%" to player
+			wait 1 tick
+			set {lista.%player%::*} to last 50 elements of {backups.%arg-1%::*}
+			add {lista.%player%::*} to player's current inventory
+			set {backuped.player.%{1player.%player%}%} to arg-1
+		else:
+			send "&8» &cThis player has no saved deaths!"
+
+command /backup-collect:
+	permission: backup.collect
+	trigger:
+		set {player.%player%} to player's name
+		open chest inventory with 3 rows named "&8Collect Backups" to player
+		wait 1 tick
+		add {backup.odbierz.%{player.%player%}%::*} to player's current inventory
+
+on inventory click:
+	if name of event-inventory contains "Deaths":
+		cancel event
+		if player has permission "backup.use":
+			set {player.%player%} to player's name
+			if clicked item is book and quill:
+				set {item.%{player.%player%}%} to clicked item
+				set {name.%{player.%player%}%} to clicked item's name
+				open chest inventory with 6 rows named "%{name.%{player.%player%}%}%" to player
+				wait 1 tick
+				add {death.items.%{name.%{player.%player%}%}%::*} to player's current inventory
+				set slot 53 of player's current inventory to gray stained glass pane
+				set slot 52 of player's current inventory to gray stained glass pane
+				set slot 51 of player's current inventory to gray stained glass pane
+				set slot 49 of player's current inventory to gray stained glass pane
+				set slot 50 of player's current inventory to barrier named "&cClose" with lore "&7Click, to close this page"
+				set slot 47 of player's current inventory to gray stained glass pane
+				set slot 48 of player's current inventory to lime dye named "&aGive Backup" with lore "&7Click, to give the backup"
+				set slot 46 of player's current inventory to gray stained glass pane
+				set slot 45 of player's current inventory to gray stained glass pane
+	if name of event-inventory contains "Death":
+		if player is not op:
+			cancel event
+		if player has permission "backup.use":
+			set {player.%player%} to player's name
+			if clicked item is gray stained glass pane:
+				cancel event
+			if clicked item is barrier:
+				cancel event
+				open chest inventory with 6 rows named "&fDeaths &c%{backuped.player.%{1player.%player%}%}%" to player
+				wait 1 tick
+				set {lista.%{player.%player%}%::*} to last 50 elements of {backups.%{backuped.player.%{1player.%player%}%}%::*}
+				add {lista.%{player.%player%}%::*} to player's current inventory
+			if clicked item is lime dye:
+				cancel event
+				close player's inventory
+				send title "&a&lBackups" with subtitle "&fBackup given to player %{1player.%player%}%" to player for 3 second
+				if file "BackupLogs/logi-%{player.%player%}%.txt" doesn't exist:
+					create file path "BackupLogs/logs-%{player.%player%}%.txt"
+					append "» Administrator %{player.%player%}% gave the backup''%{name.%{player.%player%}%}%'' to player %{1player.%player%}% - %now%" to file path "BackupLogs/logi-%{player.%player%}%.txt"
+				else:
+					append "» Administrator %{player.%player%}% gave the backup''%{name.%{player.%player%}%}%'' to player %{1player.%player%}% - %now%" to file path "BackupLogs/logi-%{player.%player%}%.txt"
+				set {size.%{player.%player%}%.temp} to size of {death.items.%{name.%{player.%player%}%}%::*}
+				if {size.%{player.%player%}%.temp} > 27:
+					set {backup.size.temp.%player%} to size of {backup.odbierz.%{backuped.player.%{1player.%player%}%}%::*}
+					if {backup.size.temp.%player%} < 23:
+						set {name1.%{player.%player%}%} to "%{name.%{player.%player%}%}% &8»&f 1/2"
+						set {name2.%{player.%player%}%} to "%{name.%{player.%player%}%}% &8»&f 2/2"
+						set {death.items.%{name.%{player.%player%}%}%.temp::*} to {death.items.%{name.%{player.%player%}%}%::*}
+						set {elements.%{name.%{player.%player%}%}%} to size of {death.items.%{name.%{player.%player%}%}%.temp::*}
+						set {elements1.%{name.%{player.%player%}%}%} to {elements.%{name.%{player.%player%}%}%} - 27
+						set {death.odbierz1.%{name1.%{player.%player%}%}%::*} to first 27 elements of {death.items.%{name.%{player.%player%}%}%.temp::*}
+						set {death.odbierz2.%{name2.%{player.%player%}%}%::*} to last {elements1.%{name.%{player.%player%}%}%} elements of {death.items.%{name.%{player.%player%}%}%.temp::*}
+						wait 1 tick
+						set line 4 of the lore of {item.%{player.%player%}%} to "&8» &cAdministrator: &f%{player.%player%}%"
+						set line 5 of the lore of {item.%{player.%player%}%} to ""
+						add {item.%{player.%player%}%} named "%{name1.%{player.%player%}%}%" to {backup.odbierz.%{backuped.player.%{1player.%player%}%}%::*}
+						add {item.%{player.%player%}%} named "%{name2.%{player.%player%}%}%" to {backup.odbierz.%{backuped.player.%{1player.%player%}%}%::*}
+					else:
+						close player's inventory
+						send title "&c&lBackupy" with subtitle "&fThis player has too much backups to collect!" to player for 3 second
+				else:
+					set {backup.size.temp.%player%} to size of {backup.odbierz.%{backuped.player.%{1player.%player%}%}%::*}
+					if {backup.size.temp.%player%} < 23:
+						set {elements.%{name.%{player.%player%}%}%} to size of {death.items.%{name.%{player.%player%}%}%::*}
+						set line 4 of the lore of {item.%{player.%player%}%} to "&8» &cAdministrator: &f%{player.%player%}%"
+						set line 5 of the lore of {item.%{player.%player%}%} to ""
+						add {item.%{player.%player%}%} to {backup.odbierz.%{backuped.player.%{1player.%player%}%}%::*}
+					else:
+						close player's inventory
+						send title "&c&lBackups" with subtitle "&fThis player has too much backups to collect!" to player for 3 second
+
+on inventory click:
+	if name of event-inventory contains "Collect Backups":
+		cancel event
+		if player has permission "backup.collect":
+			set {player.%player%} to player's name
+			if clicked item is book and quill:
+				if clicked item's name contains "1/2":
+					set {name.odbierz1.%{player.%player%}%} to clicked item's name
+					loop 36 times:
+						set {slot.%{player.%player%}%} to slot (loop-number - 1) of player's inventory
+						if {slot.%{player.%player%}%} is air:
+							add 1 to {airslot.%{player.%player%}%}
+					if {airslot.%{player.%player%}%} >= 27:
+						add {death.odbierz1.%{name.odbierz1.%{player.%player%}%}%::*} to player's inventory
+						remove clicked item from {backup.odbierz.%{player.%player%}%::*}
+						close player's inventory
+						send title "&a&lBackups" with subtitle "&fCollected backup succesfully!" to player for 3 second
+					else:
+						send title "&c&lBackups" with subtitle "&fYou need 27 free slots to collect this backup!" to player for 3 second
+						close player's inventory
+					clear {airslot.%{player.%player%}%}
+				cancel event
+				if clicked item's name contains "2/2":
+					set {name.odbierz2.%{player.%player%}%} to clicked item's name
+					set {elements.%{player.%player%}%} to size of {death.odbierz2.%{name.odbierz2.%{player.%player%}%}%::*}
+					loop 36 times:
+						set {slot.%{player.%player%}%} to slot (loop-number - 1) of player's inventory
+						if {slot.%{player.%player%}%} is air:
+							add 1 to {airslot.%{player.%player%}%}
+					if {airslot.%{player.%player%}%} >= {elements.%{player.%player%}%}:
+						add {death.odbierz2.%{name.odbierz2.%{player.%player%}%}%::*} to player's inventory
+						remove clicked item from {backup.odbierz.%{player.%player%}%::*}
+						close player's inventory
+						send title "&a&lBackups" with subtitle "&fCollected backup succesfully!" to player for 3 second
+					else:
+						send title "&c&lBackups" with subtitle "&fYou need %{elements.%{player.%player%}%}% free slots to collect this backup!" to player for 3 second
+						close player's inventory
+					clear {airslot.%{player.%player%}%}
+				cancel event
+				if clicked item's name doesn't contain "1/2" or "2/2":
+					set {name.odbierz.%{player.%player%}%} to clicked item's name
+					loop 36 times:
+						set {slot.%{player.%player%}%} to slot (loop-number - 1) of player's inventory
+						if {slot.%{player.%player%}%} is air:
+							add 1 to {airslot.%{player.%player%}%}
+					if {airslot.%{player.%player%}%} >= {elements.%{name.odbierz.%{player.%player%}%}%}:
+						add {death.items.%{name.odbierz.%{player.%player%}%}%::*} to player's inventory
+						remove clicked item from {backup.odbierz.%{player.%player%}%::*}
+						close player's inventory
+						send title "&a&lBackups" with subtitle "&fCollected backup succesfully!" to player for 3 second
+					else:
+						send title "&c&lBackups" with subtitle "&fYou need %{elements.%{name.odbierz.%{player.%player%}%}%}% free slots to collect this backup!" to player for 3 second
+						close player's inventory
+					clear {airslot.%{player.%player%}%}
+		
+
+on death:
+	set {player.%victim%} to victim's name
+	add 1 to {number.%{player.%victim%}%}
+	set {backup.name.%{number.%{player.%victim%}%}%} to "&c%{player.%victim%}% &8» &fDeath %{number.%{player.%victim%}%}%"
+	set {death.items.%{backup.name.%{number.%{player.%victim%}%}%}%::*} to all items in victim's inventory
+	set {item.%{player.%victim%}%} to book and quill
+	set {lore.%{player.%victim%}%::*} to "&8» &cTime: &f%now% \n &8» &cKiller: &f%attacker% \n "
+	set line 1 of the lore of {item.%{player.%victim%}%} to ""
+	set line 2 of the lore of {item.%{player.%victim%}%} to "&8» &cTime: &f%now%"
+	set line 3 of the lore of {item.%{player.%victim%}%} to "&8» &cKiller: &f%attacker%"
+	set line 4 of the lore of {item.%{player.%victim%}%} to ""
+	add {item.%{player.%victim%}%} named "%{backup.name.%{number.%{player.%victim%}%}%}%" to {backups.%{player.%victim%}%::*}
+	if {number.%{player.%victim%}%} > 50:
+		set {backups.%{player.%victim%}%::*} to last 50 elements of {backups.%{player.%victim%}%::*}
+
+command /clearbackups [<text>]:
+	permission: op
+	trigger:
+		set {player.%player%} to arg-1
+		if arg-1 is set:
+			delete {backups.%{player.%player%}%::*}
+			delete {number.%{player.%player%}%}
+			delete {backup.odbierz.%{player.%player%}%::*}
+			send "&8» &aSuccesfully cleared deaths history of player &2%arg-1%"
+		else:
+			loop {players::*}:
+				delete {backups.%loop-value%::*}
+				delete {number.%loop-value%}
+				delete {backup.odbierz.%loop-value%::*}
+				send "&8» &aSuccesfully cleared deaths history of all players"
+
+every 6 second:
+	loop all players:
+		set {player.%loop-player%} to loop-player's name
+		set {odbierz.%{player.%loop-player%}%} to size of {backup.odbierz.%{player.%loop-player%}%::*}
+		if {odbierz.%{player.%loop-player%}%} > 0:
+			send title "&a&lBackups" with subtitle "&fCollect backup /backup-collect" to loop-player for 1.5 second
+
+command /backups-to-collect [<text>]:
+	permission: backup.rob
+	trigger:
+		set {player.%player%} to arg-1
+		set {1player.%player%} to player's name
+		if arg-1 is set:
+			open chest inventory with 3 rows named "&8Remove given backup" to player
+			wait 1 tick
+			add {backup.odbierz.%{player.%player%}%::*} to player's current inventory
+		else:
+			send "&8» &cYou have to type player's name!"
+
+on inventory click:
+	if name of event-inventory contains "Remove given backup":
+		cancel event
+		if player has permission "backup.rob":
+			if clicked item is book and quill:
+				set {name.%player%} to clicked item's name
+				set {lore.%player%} to 4nd line of lore of clicked item
+				remove clicked item from {backup.odbierz.%{player.%player%}%::*}
+				close player's inventory
+				send title "&c&lBackups" with subtitle "&fRemoved given backup from player %{player.%player%}%" to player for 3 second
+				if file "BackupRobLogs/logi-%{1player.%player%}%.txt" doesn't exist:
+					create file path "BackupUsuwanieLogs/logi-%{1player.%player%}%.txt"
+					append "» Administrator %player's name% robbed given backup ''%{name.%player%}%'' from the player %{player.%player%}% - %now%" to file path "BackupUsuwanieLogs/logi-%{1player.%player%}%.txt"
+				else:
+					append "» Administrator %player's name% robbed given backup ''%{name.%player%}%'' from the player %{player.%player%}% - %now%" to file path "BackupUsuwanieLogs/logi-%{1player.%player%}%.txt"

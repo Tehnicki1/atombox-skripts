@@ -1,0 +1,231 @@
+#Colors permissions:
+#    server.color.<number>
+#    
+#    numbers from 1 to are old-format colors (&c/&6...)
+#    number 8 is rainbow
+#    numbers from 9 to 13 are hex colors
+#    number 14 is hex/gradient creator
+    
+command /chatcolor [<offline player>] [<text>] [<integer>]:
+    permission: server.color.command
+    permission message: &cYou can't use that command!
+    aliases: colour
+    trigger:
+        if:
+            arg-1 is set
+            arg-2 is "clear"
+            player has permission "sever.color.admin"
+        then:
+            send "&aYou cleared %arg-1%'s colored message"
+            delete {colorChange::playerColor::%arg-1%}
+        else:
+            if:
+                arg-1 is set
+                arg-2 is "perms"
+                player has permission "server.color.admin"
+            then:
+                send formatted rainbow("%arg-1%' colors")
+                send ""
+                loop size of {colorChange::color::*} times:
+                    set {_colorPermission} to "server.color.%loop-number%"
+                    if {colorChange::color::%loop-number%} contains "-":
+                        set {_hex::*} to {colorChange::color::%loop-number%} split at "-"
+                        set {_name} to gradient({colorChange::name::%loop-number%}, ({_hex::1}, {_hex::2}))
+                    else if {colorChange::color::%loop-number%} is "RAINBOW":
+                        set {_name} to rainbow("Rainbow")
+                    else if {colorChange::color::%loop-number%} is "CUSTOM":
+                        set {_name} to "&fHex/Gradient creator"
+                    else:
+                        set {_name} to "%{colorChange::color::%loop-number%}%%{colorChange::name::%loop-number%}%"
+                    if arg-1 has permission {_colorPermission}:
+                        send formatted "<command:/color %arg-1% toggle %loop-number%><#9DFD38>✔ %{_name}%"
+                    else:
+                        send formatted "<command:/color %arg-1% toggle %loop-number%><#CC0000>✘ %{_name}%"
+                send ""
+                send formatted rainbow("Click on color to toggle permission.")
+            else:
+                if:
+                    arg-1 is set
+                    arg-2 is "toggle"
+                    arg-3 is set
+                    player has permission "server.color.admin"
+                then:
+                    if arg-1 has permission "server.color.%arg-3%":
+                        console command "lp user %arg-1% permission set server.color.%arg-3% false"
+                    else:
+                        console command "lp user %arg-1% permission set server.color.%arg-3% true"
+                    wait 1 tick
+                    player command "color %arg-1% perms"
+                else:
+                    openColorGUI(player)
+            
+on inventory click:
+    name of event-inventory is "&8Choose message color"
+    cancel event
+    event-inventory is not player's inventory
+    if clicked slot is {@colorSlots}:
+        close player's inventory
+        set {_colorId} to index of clicked slot - 9
+        if {_colorId} > 7:
+            remove 2 from {_colorId}
+        set {_colorPermission} to "server.color.%{_colorId}%"
+        if player has permission {_colorPermission}:
+            if {_colorId} is 8:
+                send formatted rainbow("You selected Rainbow color.")
+                set {colorChange::playerColor::%player%} to "RAINBOW"
+            else if {_colorId} is between 9 and 13:
+                set {_hex::*} to {colorChange::color::%{_colorId}%} split at "-"
+                send formatted gradient("You created gradient: %{colorChange::name::%{_colorId}%}%", ({_hex::1}, {_hex::2}))
+                set {colorChange::playerColor::%player%} to "%{_hex::1}%-%{_hex::2}%"
+            else if {_colorId} is 14:
+                send formatted rainbow("Hex/Gradient creator")
+                send ""
+                send "<url:https://www.birdflop.com/resources/rgb/> [Click, to open HEX colors picker]"
+                send ""
+                send " To create gradient, send on chat #HEX1-#HEX2"
+                send " To create hex color, send on chat #HEX"
+                send ""
+                send "&cUse ""Cancel"", to leave creator."
+                send ""
+                set {colorChange::playerInput::%player%} to true
+            else:
+                send "%{colorChange::color::%{_colorId}%}%You chosed: %{colorChange::name::%{_colorId}%}%"
+                set {colorChange::playerColor::%player%} to {colorChange::color::%{_colorId}%}
+        else:
+            send "&cYou cannot use this color!"
+    if clicked slot is 40:
+        close player's inventory
+    if clicked slot is 38:
+        close player's inventory
+        send "&eYour color has been removed."
+        delete {colorChange::playerColor::%player%}
+
+on chat:
+    if {colorChange::playerColor::%player%} is set:
+        if {colorChange::playerColor::%player%} contains "-":
+            if length of message > 1:
+                set {_hex::*} to {colorChange::playerColor::%player%} split at "-"
+                set {_message} to formatted gradient(message, ({_hex::1}, {_hex::2}))
+                replace all "§" with "&" in {_message}
+                set message to {_message}
+        else if {colorChange::playerColor::%player%} contains "RAINBOW":
+            if length of message > 1:
+                set {_message} to formatted rainbow(message)
+                replace all "§" with "&" in {_message}
+                set message to {_message}
+        else:
+            set {_message} to "%{colorChange::playerColor::%player%}%%message%"
+            set message to {_message}
+
+on chat:
+    if {colorChange::playerInput::%player%} is true:
+        delete {colorChange::playerInput::%player%}
+        cancel event
+        if uncolored message contains "Cancel" or "cancel":
+            send "&cYou leaved gradient creator."
+        else:
+            if uncolored message partially matches "#[0-9A-Fa-f]{6}-#[0-9A-Fa-f]{6}":
+                set {_hex::*} to uncolored message split at "-"
+                replace all "#" with "" in {_hex::*}
+                send formatted gradient("You choosed gradient: #%{_hex::1}% -> #%{_hex::2}%", ({_hex::1}, {_hex::2}))
+                set {colorChange::playerColor::%player%} to "%{_hex::1}%-%{_hex::2}%"
+            else if uncolored message partially matches "#[0-9A-Fa-f]{6}":
+                set {_hex} to uncolored message
+                replace all "#" with "" in {_hex}
+                send formatted gradient("You choosed Hex color: #%{_hex}%", ({_hex}, {_hex}))
+                set {colorChange::playerColor::%player%} to "%{_hex}%-%{_hex}%"
+            else:
+                send "&cProvided wrong color format. Use: #HEX1-#HEX2 or #HEX"
+
+function openColorGUI(p: player):
+    set {_gui} to chest inventory with 5 rows named "&8Choose message color"
+    set slot (integers between 0 and 35) of {_gui} to gray stained glass pane named " "
+    set slot (integers between 36 and 44) of {_gui} to black stained glass pane named " "
+    set slot 40 of {_gui} to barrier block named "&cClick to close."
+    set slot 38 of {_gui} to water bucket named "&aRemove your color." with lore "" and "&eClick!"
+    set {_slot} to 10
+    
+    loop size of {colorChange::color::*} times:
+        set {_colorPermission} to "server.color.%loop-number%"
+        set {_item} to {colorChange::item::%loop-number%}
+        if {_p} has permission {_colorPermission}:
+            set {_status} to "&eClick to set!"
+        else:
+            set {_status} to "&cLocked!"
+        if {colorChange::color::%loop-number%} is "RAINBOW":
+            set {_name} to rainbow("Rainbow")
+            set {_example} to "&fColor: %{_name}%"
+        else if {colorChange::color::%loop-number%} contains "-":
+            set {_hex::*} to {colorChange::color::%loop-number%} split at "-"
+            set {_name} to gradient({colorChange::name::%loop-number%}, ({_hex::1}, {_hex::2}))
+            set {_example} to "&fColor: %{_name}%"
+        else if {colorChange::color::%loop-number%} is "CUSTOM":
+            set {_example} to "&aSet own Hex/Gradient"
+        else:
+            set {_example} to "&fKolor: %{colorChange::color::%loop-number%}%%{colorChange::name::%loop-number%}%"
+        set slot {_slot} of {_gui} to {_item} named {_example} with lore "" and {_status}
+        add 1 to {_slot}
+        if loop-number is 7:
+            add 2 to {_slot}
+    
+    open {_gui} to {_p}
+
+on load:
+    set {colorChange::color::*} to "&a", "&3", "&b", "&d", "&5", "&e", "&c", "RAINBOW", "084CFB-ADF3FD", "FB0808-FFE100", "009245-FCEE21", "FF00DB-00ECFF", "C6EA8D-FE90AF" and "CUSTOM"
+    set {colorChange::name::*} to "Green", "Cyan", "Aqua", "Pink", "Purple", "Yellow", "Red", "RAINBOW", "Ice", "Fire", "Lime", "Candy", "Cactus" and "CUSTOM"
+    set {colorChange::item::*} to lime dye, cyan dye, light blue dye, magenta dye, purple dye, yellow dye, red dye, torch flower, soul campfire, campfire, golden apple, sugar, cactus and name tag
+    
+options:
+    colorSlots: 10 or 11 or 12 or 13 or 14 or 15 or 16 or 19 or 20 or 21 or 22 or 23 or 24 or 25
+    
+#https://forums.skunity.com/threads/colorutils-1-16-skript-2-6.12134/
+
+function RGBToHex(number: numbers) :: string:
+    loop {_number::*}:
+        set {_r} to join {_r}, (character at (mod((floor(min(max(loop-value, 0), 255) / 16)), 16) + 1) in "0123456789ABCDEF") and (character at ((mod(min(max(loop-value, 0), 255), 16)) + 1) in "0123456789ABCDEF")
+    return colored "<##%{_r}%>"
+   
+function HexToRGB(hex: string) :: numbers:
+    replace all "##" with "" in {_hex}
+    set {_s::*} to split "0123456789abcdefklmnor" at ""
+    loop 3 times:
+        set {_n} to subtext of {_hex} from characters (loop-value -1)*2+1 to loop-value*2 in lower case
+        add (index of first element out of (split {_n} at "") in "0123456789abcdefklmnor" -1)* 16 to {_rgb::%loop-value-1%}
+        add index of 2nd element out of (split {_n} at "") in "0123456789abcdefklmnor"-1  to {_rgb::%loop-value-1%}
+    return {_rgb::*}
+    
+function gradient(input: string, color: strings) :: string:
+    loop {_color::*}:
+        set {_rgb::%loop-index%::*} to HexToRGB(loop-value)
+    set {_n} to size of {_color::*} -1
+    set {_delta} to 180 / (length of uncolored {_input}/{_n} - 1)
+    loop {_n} times:
+        loop ceil(length of uncolored {_input}/{_n}) times:
+            set {_y} to ((loop-value-1) -1)*(ceil((length of uncolored {_input})/{_n})) + (loop-value-2)
+            while character at {_y}+{_x} in {_input} is "§":
+                if "abcdefklmnor0123456789" contains character at {_y}+{_x}+1 in {_input}:
+                    set {_format} to (join {_format} and "&%character at {_y}+{_x}+1 in {_input}%") if character at {_y}+{_x}+1 in {_input} is not "r", else ("")
+                    add 2 to {_x}
+            set {_character} to character at {_y} in uncolored {_input}
+            set {_startColorProportion} to (0.5 * (sin(({_delta}*((loop-value-2)-1))+90) + 1))
+            set {_endColorProportion} to (0.5 * (sin(({_delta}*((loop-value-2)-1))+270) + 1))
+            loop 3 times:
+                set {_n::%loop-value-3%} to ({_rgb::%loop-value-1%::%loop-value-3%} * {_startColorProportion}) + ({_rgb::%((loop-value-1) + 1)%::%loop-value-3%} * {_endColorProportion})
+            set {_output} to join {_output}, RGBToHex({_n::*}), {_format} and {_character}
+    return colored {_output}
+    
+function rainbow(input: string, wrapAmount: number = -1, lightness: number = 0.5) :: string:
+    set {_delta} to 360 / ({_wrapAmount} if {_wrapAmount} > 0, else length of {_input})
+    set {_lightnessModifier} to (({_lightness}*2)-1) * 255
+    set {_angle} to 90
+    loop length of {_input} times:
+        set {_character} to character at loop-value in {_input}
+        if {_character} or (character at (loop-value - 1) in {_input}) is "§":
+            if "abcdefklmnor0123456789" contains {_character}:
+                set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
+            continue     
+        loop 3 times:
+            set {_n::%loop-value-2%} to (0.5 * (sin(({_angle} + (loop-number-2*120-120))) + 1)) * 255 + {_lightnessModifier}
+        set {_output} to join {_output}, RGBToHex({_n::*}), {_format} and {_character}
+        remove {_delta} from {_angle}
+    return colored {_output}

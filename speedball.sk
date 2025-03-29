@@ -1,0 +1,14 @@
+command /strengthstar:
+    permission: strengthstar.give
+    permission message: "&cYou don't have permission to use this command!"
+    trigger:
+        give player 1 firework star named "" with lore "&7Hold this item and you will get a permanently Strength I effect!"
+        send "&aYou received a StrengthStar!"
+        send "&7Hold this item and you will get a permanently Strength I effect!"
+
+every 1 second:
+    loop all players:
+        if loop-player has a firework star:
+            apply strength 1 to loop-player
+        else:
+            remove strength from loop-player

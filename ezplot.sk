@@ -1,0 +1,18 @@
+command /ezplotbyhami <text>:
+    permission: op
+    trigger:
+        execute player command "region create %arg-1%"
+        execute player command "region flag %arg-1% blockplace allow"
+        execute player command "region flag %arg-1% blockbreak allow"
+        execute player command "region flag %arg-1% chest-access allow"
+        execute player command "region flag %arg-1% interact allow"
+        execute player command "region flag %arg-1% use allow"
+        execute player command "region flag %arg-1% door-access allow"
+        execute player command "region priority %arg-1% 3000"
+        execute player command "plotman create %arg-1%"
+
+        execute player command "region create %arg-1%-floor"
+        execute player command "region setparent %arg-1%-floor %arg-1%"
+        execute player command "region flag %arg-1%-floor blockbreak deny"
+        execute player command "region flag %arg-1%-floor blockplace deny"
+        execute player command "region flag %arg-1%-floor chest-access deny"

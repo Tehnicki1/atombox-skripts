@@ -1,0 +1,34 @@
+on inventory click:
+	if clicked item is book and quill:
+		if 4nd line of clicked item's lore contains "Administrator":
+			set {itembackup.%player%} to name of clicked slot
+			replace all "§c" with "" in {itembackup.%player%}
+			replace all "§f" with "" in {itembackup.%player%}
+			replace all "§8" with "" in {itembackup.%player%}
+			wait 1 tick
+			create a new embed:
+				title: "%player% removed the backup"
+				description: "%{itembackup.%player%}%"
+				color: "#ff0004"
+				saveInto: {_embed}
+			create a new webhook message:
+				webhook: "https://discord.com/api/webhooks/1341412410161889422/mGfKjIxsqFYjcm8Im68Hbhi4x1Ya_9QAARUD2ZlHVX71PHB0DlexxSInP2WjTrhERP3D"
+				embed: {_embed}
+		else:
+			wait 1 tick
+			set {itembackup.%player%} to name of player's current inventory
+			replace all "§c" with "" in {itembackup.%player%}
+			replace all "§f" with "" in {itembackup.%player%}
+			replace all "§8" with "" in {itembackup.%player%}
+		
+
+on inventory click:
+	if clicked item is lime dye named "&aGive Backup":
+		create a new embed:
+			title: "%player% gave the backup"
+			description: "%{itembackup.%player%}%"
+			color: "#14db00"
+			saveInto: {_embed}
+		create a new webhook message:
+			webhook: "https://discord.com/api/webhooks/1341412410161889422/mGfKjIxsqFYjcm8Im68Hbhi4x1Ya_9QAARUD2ZlHVX71PHB0DlexxSInP2WjTrhERP3D"
+			embed: {_embed}

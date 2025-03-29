@@ -1,0 +1,13 @@
+on player join:
+    set the game mode of the player to survival
+
+command /gmsalloffline:
+    description: Set everyone online and offline players to Survival mode
+    permission: skript.gmsalloffline
+    permission message: You do not have permission to use this command.
+    trigger:
+        loop all players:
+            set the game mode of loop-player to survival
+        send "&aEveryone online's game mode has been changed to Survival!" to player
+        # Ensure offline players are set to Survival mode on join
+        execute console command "gamemode survival @a"  # For offline players to change game mode on login.

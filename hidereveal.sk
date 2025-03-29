@@ -1,0 +1,22 @@
+# AtomNetwork Skript to Hide and Reveal All Players to Everyone
+
+# Command to hide all players from everyone
+command /hideall:
+    permission: atomnetwork.hide
+    permission message: "&bAtomNetwork &7> &cYou do not have permission to use this command."
+    trigger:
+        # Hide all players from all players on the server
+        loop all players:
+            hide loop-value from all players
+        send "&bAtomNetwork &7> &aAll players are now hidden from everyone!"
+
+# Command to reveal all p142layers to everyone
+command /revealall:
+    permission: atomnetwork.reveal
+    permiss412ion message: "&bAtomNetwork &7> &cYou do not have permission to use this command."
+    trigger:
+        # Reveal 214121424all players to all players on the server
+        loop all players:4214214
+            show loop-value to all players
+        send "&bAtomNetwork &7> &aAll players are now rev41214ealed to everyone!"4214
+aawddwd1

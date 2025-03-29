@@ -1,0 +1,92 @@
+on rightclick with carrot on a stick:
+    if name of tool of player is "<##fbfbfb>&lS<##eff8fb>&ln<##e2f6fb>&lo<##d6f3fb>&lw<##caf1fc>&lb<##bdeefc>&la<##b1ecfc>&ll<##a5e9fc>&ll <##98e7fc>&ll<##8ce4fc>&la<##80e2fc>&lu<##73dffc>&ln<##67ddfd>&lc<##5bdafd>&lh<##4ed8fd>&le<##42d5fd>&lr":
+        if {rocketlaunchercooldown::*} contains player:
+            cancel event
+            send "&cThis item is on cooldown! You can use it every 30 seconds" to player
+        else:
+            shoot snowball at speed 4 
+            add player to {rocketlaunchercooldown::*}
+            set item cooldown of player's tool for player to 30 seconds
+            wait 30 seconds
+            remove player from {rocketlaunchercooldown::*}
+            set {egglauncher::%player's uuid%} to 0
+
+command /setsnowdamage <number>:
+    permission: yourplugin.setdamage  # Optional, set to your desired permission
+    trigger:
+        set {damage_force} to arg-1
+        send "Damage force set to %{damage_force}%" to player
+	
+# Event to handle projectile hits
+on projectile hit:
+    if projectile is a snowball:
+        create a safe explosion of force {damage_force} at event-location
+        make 300 of item particle using eye of ender at event-location
+
+on damage:
+  if "%region at victim%" contains "spawn" or "spawn1" or "spawn5" or "spawn3" or "startermine" or "plots" or "afk" or "afkzone" or "customplot1" or "customplot2" or "customplot3" or "customplot4" or "customplot5" or "customplot6" or "customplot7" or "customplot8" or "customplot9" or "customplot10" or "customsanta" or "maurocustom" or "customketr" or "santa":
+    cancel event
+
+on teleport:
+  if teleport cause is ender pearl:
+    cancel event
+
+command /snowballlauncher:
+  permission: OP
+  trigger:
+    give player 1 of carrot on a stick named "<##fbfbfb>&lS<##eff8fb>&ln<##e2f6fb>&lo<##d6f3fb>&lw<##caf1fc>&lb<##bdeefc>&la<##b1ecfc>&ll<##a5e9fc>&ll <##98e7fc>&ll<##8ce4fc>&la<##80e2fc>&lu<##73dffc>&ln<##67ddfd>&lc<##5bdafd>&lh<##4ed8fd>&le<##42d5fd>&lr" with lore "&fOn left click a", "<##fbfbfb>&lS<##eff8fb>&ln<##e2f6fb>&lo<##d6f3fb>&lw<##caf1fc>&lb<##bdeefc>&la<##b1ecfc>&ll<##a5e9fc>&ll &fwill be shoot", "&fthat does damage on impact.", "", "&d&l30 seconds delay"
+    send "&b&lSERVER &8>> &fGave 1 of &b[<##fbfbfb>&lS<##eff8fb>&ln<##e2f6fb>&lo<##d6f3fb>&lw<##caf1fc>&lb<##bdeefc>&la<##b1ecfc>&ll<##a5e9fc>&ll <##98e7fc>&ll<##8ce4fc>&la<##80e2fc>&lu<##73dffc>&ln<##67ddfd>&lc<##5bdafd>&lh<##4ed8fd>&le<##42d5fd>&lr] &fto %player%"
+
+command /snowdebug:
+  permission: OP
+  trigger:
+    remove player from {rocketlaunchercooldown::*}
+
+on projectile hit:
+    if projectile is an enderpearl:
+        make 300 of item particle using eye of ender at event-location
+        loop 3 times:
+            spawn primed tnt at event-location
+            set {_tnt} to last spawned entity
+            set {_x} to (random number between -0.5 and 0.5)
+            set {_y} to (random number between 0.2 and 0.5)
+            set {_z} to (random number between -0.5 and 0.5)
+            set {_velocity} to vector({_x}, {_y}, {_z})
+            set velocity of {_tnt} to {_velocity}
+            set {_tnt}'s metadata value "customTNT" to true
+            set {_tnt}'s metadata value "explodeIn" to 10
+            add {_tnt} to {tntList::*}
+
+every 1 tick:
+    loop {tntList::*}:
+        set {_tnt} to loop-value
+        if {_tnt} is not alive:
+            remove {_tnt} from {tntList::*}
+            stop
+        set {_timeLeft} to {_tnt}'s metadata value "explodeIn"
+        if {_timeLeft} <= 1:
+            remove {_tnt} from {tntList::*}
+        else:
+            set {_tnt}'s metadata value "explodeIn" to {_timeLeft} - 1
+
+on damage:
+    if attacker is a primed tnt:
+        if attacker's metadata value "customTNT" is true:
+            apply blindness to victim for 2 seconds
+            cancel event
+
+
+
+on build:
+    if block is yellow stained glass:
+        cancel event
+        set {_loc} to location of player
+        remove 1 yellow stained glass from player's inventory
+        loop all blocks in radius 20 of {_loc}:
+            if distance between {_loc} and loop-block's location is between 4 and 5:
+                if loop-block is air:
+                    set loop-block to pink stained glass
+                    add loop-block to {_blocks::*}
+        wait 15 seconds
+        loop {_blocks::*}:
+            set block at loop-value to air

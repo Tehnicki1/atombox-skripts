@@ -1,0 +1,32 @@
+on death of player:
+    add 1 to {deathids}
+    drop 1 chest named "&b&lDeath Package" with lore "" and "&cYou have Killed &4&l%victim%!" and "&c&lID: &4%{deathids}%" and "&c&lCreated on: &4&l%now%" and "&4&oRight + Sneak to &c&oView &4&oitems inside" at victim
+    loop drops:
+        add loop-value to {packages::%{deathids}%::*}
+    cancel drops
+
+on right click:
+    if player's held item is a chest named "&b&lDeath Package":
+        if player is not sneaking:
+            set {_tier} to uncolored line 3 of lore of player's held item
+            replace "ID: " with "" in {_tier}
+            remove 1 of player's tool from player's inventory
+            loop {packages::%{_tier}%::*}:
+                if player has enough space for loop-value:
+                    give player loop-value
+                else:
+                    drop loop-value at player
+            delete {packages::%{_tier}%::*}
+        else:
+            set {_gui} to new chest inventory with 6 rows named "&bDeath Package's Inventory"
+            set {_r} to 0
+            set {_tier} to uncolored line 3 of lore of player's held item
+            replace "ID: " with "" in {_tier}
+            loop {packages::%{_tier}%::*}:
+                set slot {_r} of {_gui} to loop-value
+                add 1 to {_r}
+            open {_gui} to player
+            
+on inventory click:
+    if name of player's current inventory contains "&bDeath Package's Inventory":
+        cancel event

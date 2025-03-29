@@ -1,0 +1,51 @@
+command /itremover:
+    permission: admin.removeitems
+    permission message: "&cYou don't have permission to use this command!"
+    trigger:
+        send "&aStarting full removal of all restricted items from the server..." to player
+
+        set {_restrictedItems::*} to totem of undying, boat, leather chestplate, chainmail chestplate, iron chestplate, gold chestplate, diamond chestplate, netherite chestplate, TNT
+
+        loop all players:
+            loop all items in loop-player's inventory:
+                if type of loop-item is in {_restrictedItems::*}:
+                    remove loop-item from loop-player's inventory
+            send "&aRemoved all restricted items from %loop-player%'s inventory!" to player
+
+        loop all players:
+            loop all items in loop-player's ender chest:
+                if type of loop-item is in {_restrictedItems::*}:
+                    remove loop-item from loop-player's ender chest
+            send "&aRemoved all restricted items from %loop-player%'s Ender Chest!" to player
+
+        loop all players:
+            loop all items in loop-player's inventory:
+                if loop-item is a shulker box:
+                    loop all items in loop-item's inventory:
+                        if type of loop-item-2 is in {_restrictedItems::*}:
+                            remove loop-item-2 from loop-item's inventory
+            loop all items in loop-player's ender chest:
+                if loop-item is a shulker box:
+                    loop all items in loop-item's inventory:
+                        if type of loop-item-2 is in {_restrictedItems::*}:
+                            remove loop-item-2 from loop-item's inventory
+
+        loop all blocks in all worlds:
+            if loop-block is a chest or trapped chest or shulker box or barrel or hopper or dropper or dispenser:
+                loop all items in loop-block's inventory:
+                    if type of loop-item is in {_restrictedItems::*}:
+                        remove loop-item from loop-block's inventory
+
+        loop all dropped items in all worlds:
+            if type of loop-dropped item is in {_restrictedItems::*}:
+                delete loop-dropped item
+
+        loop all entities in all worlds:
+            if loop-entity is a boat:
+                kill loop-entity
+
+        loop all entities in all worlds:
+            if loop-entity is TNT:
+                kill loop-entity
+
+        send "&aSuccessfully removed all restricted items from the server!" to all players

@@ -1,0 +1,30 @@
+## Made by Tazmyan
+## ton4o e fatass
+
+on right click:
+    if player's tool is a blaze rod:
+        set {_level} to the sharpness level of player's tool
+        if {_level} > 100:
+            clear player's tool
+            execute console command "ban %player% Bugged Sword. Caught by Tazmy"
+
+on left click:
+    if player's tool is a blaze rod:
+        set {_level} to the sharpness level of player's tool
+        if {_level} > 100:
+            clear player's tool
+            execute console command "ban %player% Bugged Sword. Caught by Tazmy"
+
+on inventory click:
+    if event-item is a blaze rod:
+        set {_level} to the sharpness level of event-item
+        if {_level} > 100:
+            remove event-item from player's inventory
+            execute console command "ban %player% Bugged Sword. Caught by Tazmy"
+
+on player join:
+    if player's tool is a blaze rod:
+        set {_level} to the sharpness level of player's tool
+        if {_level} > 100:
+            clear player's tool
+            execute console command "ban %player% Bugged Sword. Caught by Tazmy"

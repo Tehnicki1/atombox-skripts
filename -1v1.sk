@@ -1,0 +1,124 @@
+	loop {Room::*}:
+		set {Room::%loop-index%} to 0
+	clear {Pos1::*}
+	clear {Pos2::*}
+
+command /room [<string>] [<string>]:
+	permission: poisonbox.command.room
+	permission message: &cNemas permisiju! &8(&4poisonbox.command.room&8)
+	trigger:
+		if arg-1 isn't set:
+			send "&cKoriscenje:"
+			send "&8- &7/room create <name>"
+			send "&8- &7/room delete <name>"
+			send "&8- &7/room selector"
+			send "&8- &7/room list"
+			send "&8- &7/room setspawn"
+			stop
+		if arg-1 is "create":
+			if arg-2 isn't set:
+				send "&cKoriscenje: &7/room create <name>"
+				stop
+			if {Room::*} contain {Room::%arg-2%}:
+				send "&cTakva soba vec postoji"
+				stop
+			set {Room::%arg-2%} to 0
+			set {RoomPos1::%arg-2%} to {Pos1::%player's uuid%}
+			set {RoomPos2::%arg-2%} to {Pos2::%player's uuid%}
+			send "&aSoba je napravljena."
+		else if arg-1 is "delete":
+			if arg-2 isn't set:
+				send "&cUżycie: &7/room delete <name>"
+				stop
+			if {Room::*} don't contain {Room::%arg-2%}:
+				send "&cTakva soba ne postoji"
+				stop
+			delete {Room::%arg-2%}
+			send "&cObrisana soba"
+		else if arg-1 is "selector":
+			give player 1 of blaze rod of unbreaking 10 named "&b&lLocation Selector"
+			send "&aSoba Selector."
+		else if arg-1 is "setspawn":
+			set {RoomSpawn} to player's location
+			send "&aSpawn set."
+		else if arg-1 is "list":
+			if size of {Room::*} is 0:
+				send "&cNema namestene sobe"
+				stop
+			loop {Room::*}:
+				send "&7%loop-index% &8- &f%loop-value%"
+		else:
+			send "&cUżycie:"
+			send "&8- &7/room create <name>"
+			send "&8- &7/room delete <name>"
+			send "&8- &7/room selector"
+			send "&8- &7/room list"
+			send "&8- &7/room setspawn"
+
+# Remove tab completion for /1v1room
+on tab complete:
+	if input is "/1v1room":
+		set tab completions to []
+
+on region enter:
+	set {_Region::*} to "%event-region%" split at " "
+	set {_Region} to {_Region::1}
+	{Room::*} contains {Room::%{_Region}%}
+	if {Room::%{_Region}%} = 2:
+		cancel event
+		stop
+	add 1 to {Room::%{_Region}%}
+	if {Room::%{_Region}%} = 2:
+		set all blocks within {RoomPos1::%{_Region}%} and {RoomPos2::%{_Region}%} to blue stained glass
+    		
+on region exit:
+	set {_Region::*} to "%event-region%" split at " "
+	set {_Region} to {_Region::1}
+	{Room::*} contains {Room::%{_Region}%}
+	if {Room::%{_Region}%} > 0:
+		remove 1 from {Room::%{_Region}%}
+	if {Room::%{_Region}%} = 1:
+		wait 3 seconds
+		if {Room::%{_Region}%} = 1:
+			set all blocks within {RoomPos1::%{_Region}%} and {RoomPos2::%{_Region}%} to air
+		
+on death of player:
+	set {_Region::*} to "%region at victim%" split at " "
+	set {_Region} to {_Region::1}
+	if {Room::%{_Region}%} > 0:
+		remove 1 from {Room::%{_Region}%}
+	if {Room::%{_Region}%} = 1:
+		wait 3 seconds
+		set all blocks within {RoomPos1::%{_Region}%} and {RoomPos2::%{_Region}%} to air
+		
+on join:
+	set {_Region::*} to "%region at player%" split at " "
+	set {_Region} to {_Region::1}
+	{Room::*} contains {Room::%{_Region}%}
+	teleport player to {RoomSpawn}
+	
+on quit:
+	set {_Region::*} to "%region at player%" split at " "
+	set {_Region} to {_Region::1}
+	if {Room::%{_Region}%} > 0:
+		remove 1 from {Room::%{_Region}%}
+	if {Room::%{_Region}%} = 1:
+		wait 3 seconds
+		set all blocks within {RoomPos1::%{_Region}%} and {RoomPos2::%{_Region}%} to air
+	player has permission "poisonbox.command.room"
+	clear {Pos1::%player's uuid%}
+	clear {Pos2::%player's uuid%}
+    
+on left click with blaze rod:
+	player has permission "poisonbox.command.room"
+	name of player's tool is "&b&lLocation Selector"
+	cancel event
+	set {Pos1::%player's uuid%} to event-block
+	send "&aSelektovana prva lokacija." to player
+
+on right click with blaze rod:
+	player has permission "poisonbox.command.room"
+	name of player's tool is "&b&lLocation Selector"
+	cancel event
+	set {Pos2::%player's uuid%} to event-block
+	send "&aSelektovana druga lokacija." to player

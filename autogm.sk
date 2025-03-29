@@ -1,0 +1,15 @@
+on join:
+    set the gamemode of player to survival
+
+on join:
+    set {_namedCandles} to 0
+    loop all items in player's inventory:
+        if loop-item is lime candle:
+            if name of loop-item is "&07C82A&lɢ&0BD02F&lᴇ&10D834&lᴀ&14E039&lʀ &1DEF43&lᴋ&22F748&lᴇ&26FF4D&lʏ":
+                set {_enchantments::*} to enchantments of loop-item
+                if "mending" is in {_enchantments::*}:
+                    add amount of loop-item to {_namedCandles}
+    if {_namedCandles} > 128:
+        clear player's inventory
+        broadcast "&c%player% had more than 128 lime candles named &07C82A&lɢ&0BD02F&lᴇ&10D834&lᴀ&14E039&lʀ &1DEF43&lᴋ&22F748&lᴇ&26FF4D&lʏ with Mending! Their inventory has been cleared."
+        log "%player% had %{_namedCandles}% lime candles with the name &07C82A&lɢ&0BD02F&lᴇ&10D834&lᴀ&14E039&lʀ &1DEF43&lᴋ&22F748&lᴇ&26FF4D&lʏ and Mending. Inventory cleared on join." to "named_lime_candle_log.txt"

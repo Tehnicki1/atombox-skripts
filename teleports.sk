@@ -1,0 +1,41 @@
+options:
+  prefix: &b&lAtomNetwork &8»
+  bypass_permission: bypass.teleportation
+
+command /plots:
+  trigger:
+    if player has permission "{@bypass_permission}":
+      teleport player to {plot_area}
+      send action bar "&aTeleported to Plots" to player
+    else:
+      set {player_last_location} to location of player
+      set {_time} to 5
+      while {_time} > 0:
+        set {_message} to "&x&0&0&a&b&f&f%{_time}% &bseconds before teleportation"
+        send action bar {_message} to player
+        wait 1 second
+        remove 1 from {_time}
+        if distance between location of player and {player_last_location} > 1:
+          send action bar "&cTeleportation Cancelled!" to player
+          send "{@prefix} &cTeleportation cancelled because you moved!" to player
+          stop
+      teleport player to {plot_area}
+      send action bar "&aTeleported to Plots" to player
+
+command /setspawn:
+  permission: "admin.setspawn"
+  permission message: "{@prefix} &cYou don't have permission to set the spawn location!"
+  trigger:
+    set {spawn} to location of player
+    send "{@prefix} &aSpawn location has been set to your current position!" to player
+
+command /setplots:
+  permission: "admin.setplots"
+  permission message: "{@prefix} &cYou don't have permission to set the plots location!"
+  trigger:
+    set {plot_area} to location of player
+    send "{@prefix} &aPlots location has been set to your current position!" to player
+
+on right click on note block:
+    teleport player to {plot_area}
+

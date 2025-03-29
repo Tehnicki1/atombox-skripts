@@ -1,0 +1,90 @@
+every 1 minutes:													#Open
+    console command "mrl reset skull -s"
+    broadcast ""
+    broadcast "&b&lGATES &fis reseting!"
+    broadcast "&7| &7The mine is in the middle of the Gates!"
+    broadcast "&7| &7It will be closing in &75 seconds&f!"
+    broadcast "&7| &7Next Reset In &d15 Minutes&7."
+    broadcast ""
+    execute command "fill 490, 92, 593 488, 92, 593 air"
+    wait 0.5 seconds
+    execute command "fill 492, 91, 593 486, 91, 593 air"
+    wait 0.5 seconds
+    execute command "fill -493, 90, 593 485, 90, 593 air"
+    wait 0.5 seconds
+    execute command "fill 494, 89, 593  484, 89, 593 air"
+    wait 0.5 seconds
+    execute command "fill 494, 88, 593  484, 88, 593 air"
+    wait 0.5 seconds
+    execute command "fill 495, 87, 593 483, 87, 593 air"
+    wait 0.5 seconds
+    execute command "fill 495, 86, 593 483, 87, 593 air"
+    wait 0.5 seconds
+    execute command "fill 495, 85, 593 483, 85, 593 air"
+    wait 0.5 seconds
+    execute command "fill 494, 84, 593 484, 84, 593 air"
+    wait 0.5 seconds
+    execute command "fill 494, 83, 593 484, 83, 593 air"
+    wait 0.5 seconds
+    execute command "fill 493, 82, 593 485, 82, 593 air"
+    wait 0.5 seconds
+    execute command "fill 492, 81, 593 486, 81, 593 air"
+    wait 0.5 seconds
+    execute command "fill 490, 80, 593 488, 80, 593 air"
+    wait 5 seconds													#Close
+    execute command "fill 490, 92, 593 488, 92, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 492, 91, 593 486, 91, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill -493, 90, 593 485, 90, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 494, 89, 593  484, 89, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 494, 88, 593  484, 88, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 495, 87, 593 483, 87, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 495, 86, 593 483, 87, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 495, 85, 593 483, 85, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 494, 84, 593 484, 84, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 494, 83, 593 484, 83, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 493, 82, 593 485, 82, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 492, 81, 593 486, 81, 593 tinted glass"
+    wait 0.5 seconds
+    execute command "fill 490, 80, 593 488, 80, 593 tinted glass"
+
+command /setrew1:
+    permission: op
+    trigger:
+        set {rew1} to player's held item
+        message "&bSet %name of player's tool%&b to reward 1"
+        
+command /setrew2:
+    permission: op
+    trigger:
+        set {rew2} to player's held item
+        message "&bSet %name of player's tool%&b to reward 2"
+       
+command /setrew3:
+    permission: op
+    trigger:
+        set {rew3} to player's held item
+        message "&bSet %name of player's tool%&b to reward 3"
+        
+        
+on break of wither skeleton skull:
+    cancel drops
+    chance of 40%:
+        drop {rew1} at event-location
+        stop
+    chance of 35%:
+        drop {rew2} at event-location
+        stop
+    chance of 25%:
+        drop {rew3} at event-location
+        stop

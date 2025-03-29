@@ -1,0 +1,44 @@
+options:
+    discordlink: https://discord.gg/QvZtsqB8su
+    storelink: https://atombox.craftingstore.net
+    votelink: https://minecraft-mp.com/server/332371/vote/
+    
+command /discord: 
+    trigger:
+        send "&r"
+        send "<##32D3F6>&lDISCORD"
+        send ""
+        send "&7Stay up to date with all <##32D3F6>announcements&7,"
+        send "&7<##32D3F6>giveaways&7, <##32D3F6>events &7and much more! Join"
+        send "&7the <##32D3F6>AtomNetwork &7Community Discord today!"
+        send ""
+        send "<##32D3F6>&l➥ <##32D3F6>&n<url:{@discordlink}>{@discordlink}<reset>"
+        send "&r"
+        play sound "entity.player.levelup" with volume 5 to the player
+
+
+command /vote:
+    trigger:
+        send "&r"
+        send "<##FB08F3>&lVOTE FOR US"
+        send "&r"
+        send "&fVoting helps grow the Network. You also"
+        send "&fget free rewards like keys and points!"
+        send "&r"
+        send "&f➥ <##FB08F3>&n<url:{@votelink}>https://vote.atomnetwork.org<reset>"
+        send "&r" 
+        play sound "entity.player.levelup" with volume 5 to the player
+
+command /store: 
+    aliases: /buy, /shop
+    trigger:
+        send "&r"
+        send "<##08FB37>&lSTORE"
+        send ""
+        send "&7Donate to us and help <##08FB37>support&7,"
+        send "&7<##08FB37>AtomNetwork&7! Purchase&7, <##08FB37>ranks&7,"
+        send "&7kits&7 <##08FB37>keys &7and more at our store!"
+        send ""
+        send "<##08FB37>➥ &n<url:{@storelink}>{@storelink}<reset>"
+        send "&r"
+        play sound "entity.player.levelup" with volume 5 to the player

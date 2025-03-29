@@ -1,0 +1,18 @@
+on load:
+    broadcast "Allay spawn script loaded successfully!"
+
+on unload:
+    broadcast "Allay spawn script unloaded."
+
+# Периодично спалнване на Allay
+on every 10 seconds:
+    loop 3 times:
+        spawn an allay at {spawn_location}
+
+# Определяне на региона "allayspawn"
+on skript start:
+    set {spawn_location} to  (624, -7, 489) # Променете на точните координати на вашия spawn регион
+
+# Команда, която се изпълнява при убийство на Allay
+on death of allay:
+    execute console command "/si give %attacker% 1 1"

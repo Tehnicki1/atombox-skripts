@@ -1,0 +1,33 @@
+on craft of magma block:
+    if player's current inventory contains magma cream:
+        cancel event
+        send "&cYou cannot craft Magma Blocks using Magma Cream!" to player
+
+on craft of boat:
+    if player's current inventory contains oak planks or birch planks or spruce planks or jungle planks or acacia planks or dark oak planks or mangrove planks or bamboo planks:
+        cancel event
+        send "&cYou cannot craft boats using planks!" to player
+
+on craft of anvil:
+    cancel event
+    send "&cYou cannot craft Anvils!" to player
+
+on craft of dispenser:
+    cancel event
+    send "&cYou cannot craft Dispensers!" to player
+
+on craft:
+    if event-item is leather chestplate or chainmail chestplate or iron chestplate or gold chestplate or diamond chestplate or netherite chestplate:
+        cancel event
+        send "&cYou cannot craft Chestplates!" to player
+
+
+
+
+
+
+
+
+
+
+

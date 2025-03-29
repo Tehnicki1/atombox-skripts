@@ -1,0 +1,22 @@
+on place:
+    if player's held item is lightning rod or crimson button or stone button or warped button or soul lantern or lantern or campfire or amethyst cluster:
+        cancel event
+        send "&cYou cannot place this item!" to player
+    if player's held item is player skull:
+        cancel event
+        send "&cYou cannot place a helmet!" to player
+    if player's held item is campfire or jungle button or acacia button or dark oak button or mangrove button or cherry button or bamboo button:
+        cancel event
+        send "&cYou cannot place this item!" to player
+
+    # Offhand checks for the same items
+    if player's offhand item is lightning rod or crimson button or stone button or warped button or soul lantern or lantern or campfire or amethyst cluster:
+        cancel event
+        send "&cYou cannot place this item!" to player
+    if player's offhand item is player skull:
+        cancel event
+        send "&cYou cannot place a helmet!" to player
+    if player's offhand item is campfire or jungle button or acacia button or dark oak button or mangrove button or cherry button or bamboo button:
+        cancel event
+        send "&cYou cannot place this item!" to player
+

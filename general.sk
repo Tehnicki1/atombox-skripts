@@ -1,0 +1,35 @@
+command /broadcast [<text>]:
+    aliases: broadcast, announce
+    permission: broadcast.use
+    trigger:
+        broadcast "","&d&lAtomNetwork &8»&f %colored arg-1%",""
+        send title "&d&lAtomNetwork" with subtitle colored arg-1 to all players for 3 seconds
+        play sound "BLOCK_NOTE_BLOCK_BIT" to all players
+
+command /bc [<text>]:
+    aliases: bc, broadcast, announce
+    permission: broadcast.use
+    trigger:
+        broadcast "","&d&lAtomNetwork &8»&f %colored arg-1%",""
+
+command /stream [<text>]:
+    permission: stream.use
+    trigger:
+        broadcast "","&bThe player &f&l%player% &bhas started streaming, join their stream and show your support. &8»&f&l %colored arg-1%",""
+        play sound "BLOCK_NOTE_BLOCK_BIT" to all players
+
+on join:
+    teleport player to {spawn}
+on first join:
+    teleport player to {spawn}
+    execute console command "crates key give %player% gearr 2"
+on respawn:
+    teleport player to {spawn}
+on region enter:
+    if "%region%" contains "strength":
+        apply strength 1 to the player for 1 days
+        apply fire resistance to the player for 1 days
+on region leave:
+    if "%region%" contains "strength":
+        remove strength from the player
+        remove fire resistance from the player

@@ -1,0 +1,159 @@
+options:
+	error: &4&lERROR &8| &7
+	prefix: &b&lAtomnetwork &8| &7
+
+on load:
+	delete {server::suffixes::list::*}
+	
+	set {server::suffixes::list::pro} to " &8 [&aPro&8]"
+	set {server::suffixes::list::rich} to " &8[<##FFD700>Rich&8]"
+	set {server::suffixes::list::poor} to " &8[&7Poor&8]"	
+	set {server::suffixes::list::stinky} to " &8[<##8B4513>Stinky&8]" #M4gicxWIzArDry9
+	set {server::suffixes::list::cutiepie} to " &8[<##FF69B4>qtπ&8]" #FireWorkShow
+	set {server::suffixes::list::amogus} to " &8[<##ff0000>&lඞAMOGUSඞ&8]"	
+	set {server::suffixes::list::nigeria} to " &8[<##00834E>&lNi&f&lger<##00834E>&lia&8]"
+	set {server::suffixes::list::usa} to " &8[&cU&9S&fA&8]"
+	set {server::suffixes::list::poland} to " &8[<##ffffff>&lPol<##ff0000>&land&8]"	
+	set {server::suffixes::list::cum} to " &8[<##ffffff>&lcum&8]" #FireWorkShow
+	set {server::suffixes::list::monke} to " &8[<##975032>&lmonke&8]" #FireWorkShow
+	set {server::suffixes::list::forg} to " &8[<##00ff00>forg&8]" #FireWorkShow	
+	set {server::suffixes::list::iscool} to " &8[&fis&b&lCOOL&8]"
+	set {server::suffixes::list::nolife} to " &8[&2NoLife&8]"
+	set {server::suffixes::list::isonfire} to " &8[&fis on &c&lFIRE&8]"	
+	set {server::suffixes::list::rgb} to " &8[<##ff0000>R<##00ff00>G<##0000ff>B&8]"
+	set {server::suffixes::list::rainbow} to " &8[<##ff0000>&lR<##ffa500>&la<##ffff00>&li<##008000>&ln<##0000ff>&lb<##4b0082>&lo<##ee82ee>&lw&8]"
+	set {server::suffixes::list::kold} to " &8[<##00ffff>cold&8]"
+	set {server::suffixes::list::atomnetwork} to " &8[&b&lAtom&b&lnetwork&8]"
+	set {server::suffixes::list::minehut} to " &8[&bMine&fHut&8]"
+	set {server::suffixes::list::owner} to " &8[&40wner&8]"	
+	set {server::suffixes::list::madcuzbad} to " &8[<##550000>Mad<##aa0000>Cuz<##ff0000>Bad&8]"
+	set {server::suffixes::list::sadcuzmad} to "  &8[<##005500>Sad<##00aa00>Cuz<##00ff00>Mad&8]"
+	set {server::suffixes::list::badcuzsad} to " &8[<##000055>Bad<##0000aa>Cuz<##0000ff>Sad&8]"	
+	set {server::suffixes::list::egirl} to " &8[&deGirl&8]" #FireWorkShow
+	set {server::suffixes::list::eboy} to " &8[<##00ffff>eBoy&8]"
+	set {server::suffixes::list::cpvper} to " &8[<##cc00ff>cpvper&8]"	
+	set {server::suffixes::list::penis} to " &8[<##E8BEAC>&l8=D&8]"
+	set {server_suffix_paper} to paper named "&2Random Suffix Token" with lore "&7Right-click to gain a random suffix"
+	set {suffix::permission::pro} to "server.suffix.pro"
+	set {suffix::permission::rich} to "server.suffix.rich"
+	set {suffix::permission::poor} to "server.suffix.poor"
+	set {suffix::permission::stinky} to "server.suffix.stinky"
+	set {suffix::permission::cutiebie} to "server.suffix.cutiepie"
+	set {suffix::permission::amogus} to "server.suffix.amogus"
+	set {suffix::permission::nigeria} to "server.suffix.nigeria"
+	set {suffix::permission::usa} to "server.suffix.usa"
+	set {suffix::permission::poland} to "server.suffix.poland"
+	set {suffix::permission::cum} to "server.suffix.cum"
+	set {suffix::permission::monke} to "server.suffix.monke"
+	set {suffix::permission::forg} to "server.suffix.forg"
+	set {suffix::permission::iscool} to "server.suffix.iscool"
+	set {suffix::permission::nolife} to "server.suffix.nolife"
+	set {suffix::permission::isonfire} to "server.suffix.isonfire"
+	set {suffix::permission::rgb} to "server.suffix.rgb"
+	set {suffix::permission::rainbow} to "server.suffix.rainbow"
+	set {suffix::permission::kold} to "server.suffix.kold"
+	set {suffix::permission::Atomnetwork} to "server.suffix.Atomnetwork"
+	set {suffix::permission::minehut} to "server.suffix.minehut"
+	set {suffix::permission::owner} to "server.suffix.owner"
+	set {suffix::permission::madcuzbad} to "server.suffix.madcuzbad"
+	set {suffix::permission::sadcuzmad} to "server.suffix.sadcuzmad"
+	set {suffix::permission::badcuzsad} to "server.suffix.badcuzsad"
+	set {suffix::permission::egirl} to "server.suffix.egirl"
+	set {suffix::permission::eboy} to "server.suffix.eboy"
+	set {suffix::permission::cpvper} to "server.suffix.cpvper"
+	set {suffix::permission::penis} to "server.suffix.penis"
+	
+command /suffix:
+	permission: server.suffix
+	permission message: {@error}You do not have the required permission &8(&c&lserver.suffix&8)
+	usage: {@error}Incorrect usage&8: &c&l/suffix
+	trigger:
+		open chest inventory with 6 rows named "&0Suffix Selector" to player
+		
+		set {_i} to 0
+		loop 54 times:
+			set slot {_i} of player's current inventory to gray stained glass pane named " "
+			add 1 to {_i}
+		
+		set {_i} to 10
+		loop 28 times:
+			set slot {_i} of player's current inventory to air
+			if mod({_i}, 9) is 7:
+				add 2 to {_i}
+			add 1 to {_i}
+		
+		set {_i} to 10
+		loop {server::suffixes::list::*}:
+			if player has permission "server.suffix.%loop-index%":
+				if {server::suffixes::players::%player%} is loop-index:
+					set slot {_i} of player's current inventory to lime dye named loop-value with lore "&aSelected" and "&0%loop-index%"
+				else:
+					set slot {_i} of player's current inventory to gray dye named loop-value with lore "&7Not selected" and "&0%loop-index%"
+			else:
+				set slot {_i} of player's current inventory to red dye named loop-value with lore "&cNo permission" and "&0%loop-index%"
+			if mod({_i}, 9) is 7:
+				add 2 to {_i}
+			add 1 to {_i}
+		
+on inventory click:
+	if name of event-inventory is "&0Suffix Selector":
+		cancel event
+		set {_id} to uncolored (last element of event-item's lore)
+		set {_suffix} to colored (last element of event-item's name)
+		set {_bsuffix} to {server::suffixes::players::%player%}
+		if event-item is gray dye:
+			if player has permission "server.suffix.%{_id}%":
+				set {server::suffixes::players::%player%} to {_id}
+				execute console command "lp user %player% meta setsuffix %{_suffix}%"
+				message "&b&lAtomnetwork Set suffix to %{_suffix}%"
+		
+		if event-item is lime dye:
+			if {server::suffixes::players::%player%} is {_id}:
+				delete {server::suffixes::players::%player%}
+				execute console command "lp user %player% meta removesuffix 1"
+		
+		if {_bsuffix} is not {server::suffixes::players::%player%}:
+			set {_i} to 10
+			loop {server::suffixes::list::*}:
+				if player has permission "server.suffix.%loop-index%":
+					if {server::suffixes::players::%player%} is loop-index:
+						set slot {_i} of player's current inventory to lime dye named loop-value with lore "&aSelected" and "&0%loop-index%"
+					else:
+						set slot {_i} of player's current inventory to gray dye named loop-value with lore "&7Not selected" and "&0%loop-index%"
+				else:
+					set slot {_i} of player's current inventory to red dye named loop-value with lore "&cNo permission" and "&0%loop-index%"
+				if mod({_i}, 9) is 7:
+					add 2 to {_i}
+				add 1 to {_i}
+				
+on right-click:
+	if event-item is {server_suffix_paper}:
+		loop 1000 times:
+			set {_randomsuffix} to random element of {suffix::permission::*}
+			if {player::%player's uuid%::suffixes::*} does not contain {_randomsuffix}:
+				execute console command "lp user %player% permission set %{_randomsuffix}% true"
+				add {_randomsuffix} to {player::%player's uuid%::suffixes::*}
+				message "&b&lAtomnetwork Added %{_randomsuffix}%"
+				remove {server_suffix_paper} from player's inventory
+				stop loop
+			else:
+				send "&b&lAtomnetwork You already own the selected suffix (%{_randomsuffix}%)"
+				
+command getsuffixpaper:
+	permission: op
+	permission message: {@error}You do not have the required permission.
+	trigger:
+		give player {server_suffix_paper}
+		
+command resetsuffixes:
+	permission: op
+	permission message: {@error}You do not have the required permission.
+	trigger:
+		message "&b&lAtomnetwork Resetting all suffix permissions for all players..."
+		loop all offline players:
+			set {_player} to loop-value-1
+			loop {suffix::permission::*}:
+				set {_suffix} to loop-value-2
+				execute console command "lp user %{_player}% permission set %{_suffix}% false"
+			clear {player::%{_player}%::suffixes::*}
+		send "All suffix permissions have been reset for all players." to player
